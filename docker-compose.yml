@@ -1,0 +1,53 @@
+services:
+  jellyfs:
+    image: ghcr.io/eebette/jellyfs:latest
+    build: .
+    container_name: jellyfs
+    restart: unless-stopped
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - type: bind
+        source: ${MEDIA_SOURCE:-/tank/media/content/Videos}
+        target: /media/source
+        read_only: true
+      - type: bind
+        source: ${MEDIA_MOUNT:-/mnt/jellyfs}
+        target: /media/mount
+        bind:
+          propagation: rshared
+    healthcheck:
+      test: ["CMD-SHELL", "mountpoint -q /media/mount"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+      start_period: 5s
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    depends_on:
+      jellyfs:
+        condition: service_healthy
+    ports:
+      - "8096:8096"
+    environment:
+      - TZ=${TZ:-America/Los_Angeles}
+    volumes:
+      - jellyfin-config:/config
+      - jellyfin-cache:/cache
+      - type: bind
+        source: ${MEDIA_MOUNT:-/mnt/jellyfs}
+        target: /media
+        read_only: true
+        bind:
+          propagation: rslave
+
+volumes:
+  jellyfin-config:
+  jellyfin-cache:
