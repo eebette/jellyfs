@@ -1,7 +1,7 @@
 FROM python:3.12-slim
 
 RUN apt-get update \
- && apt-get install -y --no-install-recommends fuse3 \
+ && apt-get install -y --no-install-recommends fuse libfuse2 \
  && rm -rf /var/lib/apt/lists/* \
  && echo "user_allow_other" >> /etc/fuse.conf
 
