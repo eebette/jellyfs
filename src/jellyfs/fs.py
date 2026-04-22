@@ -161,13 +161,11 @@ class JellyFS(Operations):
         )
 
     def read(self, path, length, offset, fh):
-        os.lseek(fh, offset, os.SEEK_SET)
-        return os.read(fh, length)
+        return os.pread(fh, length, offset)
 
     def write(self, path, buf, offset, fh):
         self._ro_guard()
-        os.lseek(fh, offset, os.SEEK_SET)
-        return os.write(fh, buf)
+        return os.pwrite(fh, buf, offset)
 
     def truncate(self, path, length, fh=None):
         self._ro_guard()
