@@ -42,7 +42,11 @@ Requires `SYS_ADMIN` + `/dev/fuse` and shared mount propagation on the target so
 sudo mkdir -p /mnt/jellyfs
 ```
 
-Prebuilt image: `ghcr.io/eebette/jellyfs:latest` (published by `.github/workflows/publish.yml` on push to `main` and version tags).
+Prebuilt image: [`ghcr.io/eebette/jellyfs:latest`](https://github.com/eebette/jellyfs/pkgs/container/jellyfs) (multi-arch: `linux/amd64`, `linux/arm64`).
+
+```bash
+docker pull ghcr.io/eebette/jellyfs:latest
+```
 
 ### `docker run`
 
@@ -67,7 +71,7 @@ docker run --rm \
 ### `docker compose` (JellyFS + Jellyfin)
 
 ```bash
-docker compose up -d --build
+docker compose up -d
 # Jellyfin: http://localhost:8096
 ```
 
