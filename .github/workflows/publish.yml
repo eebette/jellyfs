@@ -2,7 +2,7 @@ name: Publish Docker image
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     tags: ['v*']
   pull_request:
   workflow_dispatch:
@@ -31,7 +31,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
 
       - name: Extract image metadata
         id: meta
