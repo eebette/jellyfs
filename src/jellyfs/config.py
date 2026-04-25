@@ -60,7 +60,8 @@ DEFAULT_CONFIG: dict = {
         "sdtv":         "SDTV",
         "dvd":          "DVD",
     },
-    "dv_compat_label": "Optimized for Jellyfin",
+    "dv_compat_label": "Optimized for Smart TV",
+    "dv_label": "Untouched Original",
     "separator": " | ",
     "streaming_services": DEFAULT_STREAMING_SERVICES,
 }

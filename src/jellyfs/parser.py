@@ -46,6 +46,7 @@ class ParsedMedia:
     source_type:   str  = ""      # remux | encoded_disc | web | hdtv | sdtv | dvd
     streaming_svc: str  = ""      # uppercase key, e.g. "AMZN"
     dv_compat:     bool = False   # [Dolby Vision Compatibility] present
+    dv:            bool = False   # any [DV...] tag present
     extension:     str  = ""      # .mkv  or  .eng.srt  etc.
     original:      str  = ""      # untouched input filename
     matched:       bool = False   # True if pattern was recognised
@@ -93,6 +94,11 @@ def parse_filename(name: str, services: dict) -> ParsedMedia:
         # Dolby Vision compatibility / profile-8 flag
         if "dolby vision compatibility" in tl:
             info.dv_compat = True
+            continue
+
+        # Bare DV tag (e.g. "DV", "DV HDR10") — Smart-TV-incompatible profile
+        if tl == "dv" or tl.startswith("dv "):
+            info.dv = True
             continue
 
         # Source + Resolution  (e.g. "Remux 2160p")
@@ -175,6 +181,8 @@ def build_display_name(info: ParsedMedia, cfg: dict) -> str:
     # DV compatibility note
     if info.dv_compat:
         parts.append(cfg["dv_compat_label"])
+    elif info.dv:
+        parts.append(cfg["dv_label"])
 
     if parts:
         return f"{info.prefix} - {sep.join(parts)}{info.extension}"
