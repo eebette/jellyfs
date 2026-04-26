@@ -6,7 +6,8 @@ from dataclasses import dataclass
 
 # Title (Year) [tmdbid-ID] - …   (also handles tvdbid / imdbid)
 _PREFIX = re.compile(
-    r"^(?P<prefix>.+\[(?:tmdbid|tvdbid|imdbid)-[^\]]+\])"
+    r"^(?P<prefix>.+\[(?:tmdbid|tvdbid|imdbid)-[^\]]+\]"
+    r"(?:\s*-\s*S\d+E\d+(?:-E?\d+)*)?)"
     r"\s*-\s*"
     r"(?P<rest>.+)$"
 )
@@ -21,7 +22,7 @@ _SOURCE_RES = re.compile(
     r"Blu-?[Rr]ay|"
     r"WEBDL|WEB[-\s]?DL|WEBRip|WEB[-\s]?Rip|"
     r"HDTV|SDTV|DVDRip|BDRip|DVD"
-    r")(?:\s+(?P<res>\d{3,4}p)(?:\s+\w+)*)?$",
+    r")(?:[-\s]+(?P<res>\d{3,4}p)(?:\s+\w+)*)?$",
     re.IGNORECASE,
 )
 
