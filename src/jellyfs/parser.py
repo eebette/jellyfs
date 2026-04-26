@@ -22,7 +22,7 @@ _SOURCE_RES = re.compile(
     r"Blu-?[Rr]ay|"
     r"WEBDL|WEB[-\s]?DL|WEBRip|WEB[-\s]?Rip|"
     r"HDTV|SDTV|DVDRip|BDRip|DVD"
-    r")(?:[-\s]+(?P<res>\d{3,4}p)(?:\s+\w+)*)?$",
+    r")(?:[-\s]+(?P<res>\d{3,4}p)(?:\s+(?P<qual>\w+(?:\s+\w+)*))?)?$",
     re.IGNORECASE,
 )
 
@@ -107,7 +107,8 @@ def parse_filename(name: str, services: dict) -> ParsedMedia:
         if sr:
             raw = sr.group("src").upper().replace("-", "").replace(" ", "")
             info.resolution = sr.group("res") or ""
-            if raw in ("REMUX", "BDREMUX", "UHDREMUX"):
+            qual = (sr.group("qual") or "").upper()
+            if raw in ("REMUX", "BDREMUX", "UHDREMUX") or "REMUX" in qual.split():
                 info.source_type = "remux"
             elif raw in ("BLURAY", "BDRIP"):
                 info.source_type = "encoded_disc"
